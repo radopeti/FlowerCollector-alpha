@@ -19,6 +19,7 @@ namespace FlowerCollector1
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -48,6 +49,7 @@ namespace FlowerCollector1
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            
         }
 
         /// <summary>
@@ -84,6 +86,9 @@ namespace FlowerCollector1
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+            spriteBatch.Begin();
+            
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }

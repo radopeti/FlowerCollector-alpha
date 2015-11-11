@@ -10,3 +10,11 @@ FlowerCollector1/FlowerCollector1/Properties/AssemblyInfo.cs
 FlowerCollector1.sln
 FlowerCollector1/FlowerCollector1Content/character.png
 *.png
+*.exe
+FlowerCollector1/FlowerCollector1/bin/x86/Debug/FlowerCollector1.pdb
+*.xnb
+FlowerCollector1/FlowerCollector1Content/obj/x86/Debug/FlowerCollector1Content.contentproj.FileListAbsolute.txt
+*.txt
+FlowerCollector1/FlowerCollector1/obj/x86/Debug/FlowerCollector1.pdb
+*.xml
+FlowerCollector1/FlowerCollector1/FlowerCollector1.csproj.Debug.cachefile
