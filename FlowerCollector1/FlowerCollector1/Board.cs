@@ -70,8 +70,7 @@ namespace FlowerCollector1
                 for (int j = 0; j < NUM_COLUMNS; j++)
                 {
                     if (tiles[i, j].DrawRectangle.Contains(mouse.X, mouse.Y) &&
-                        (Math.Abs(collector.Row - i) == 1 ||
-                        Math.Abs(collector.Column - j) == 1))
+                        ((collector.Row == i || collector.Column == j) && (Math.Abs(collector.Row - i) == 1 || Math.Abs(collector.Column - j) == 1)))
                     {
                         if (mouse.LeftButton == ButtonState.Pressed && buttonReleased)
                         {
