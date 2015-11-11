@@ -24,6 +24,8 @@ namespace FlowerCollector1
         const int BORDER_SIZE = 5;
         //tiles
         Tile[,] tiles = new Tile[NUM_ROWS, NUM_COLUMNS];
+        //character
+        Character collector;
 
         #endregion
 
@@ -37,6 +39,7 @@ namespace FlowerCollector1
         public Board(ContentManager contentManager, Vector2 boardPosition) 
         {
             this.boardPosition = boardPosition;
+            
             for (int i = 0; i < NUM_ROWS; i++)
             {
                 for (int j = 0; j < NUM_COLUMNS; j++)
@@ -46,6 +49,8 @@ namespace FlowerCollector1
                         (int)boardPosition.Y + (BORDER_SIZE * (i + 1)) + i * 64);
                 }
             }
+
+            collector = new Character(contentManager, tiles[0, 0].Center);
         }
 
         #endregion
@@ -68,6 +73,7 @@ namespace FlowerCollector1
                     tiles[i, j].Draw(spriteBatch);
                 }
             }
+            collector.Draw(spriteBatch);
         }
 
         #endregion
