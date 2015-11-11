@@ -1,0 +1,12 @@
+*.csproj
+FlowerCollector1/FlowerCollector1/FlowerCollector1.csproj.user
+*.suo
+FlowerCollector1/FlowerCollector1/obj/x86/Debug/FlowerCollector1.csprojResolveAssemblyReference.cache
+*.cache
+FlowerCollector1/FlowerCollector1/GameThumbnail.png
+*.ico
+FlowerCollector1/FlowerCollector1/Properties/AssemblyInfo.cs
+*.contentproj
+FlowerCollector1.sln
+FlowerCollector1/FlowerCollector1Content/character.png
+*.png
