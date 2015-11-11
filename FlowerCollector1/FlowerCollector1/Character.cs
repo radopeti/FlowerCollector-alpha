@@ -18,11 +18,23 @@ namespace FlowerCollector1
         //texture
         Texture2D sprite;
         Rectangle drawRectangle;
+        //character positions on the matrix
+        int row;
+        int column;
         #endregion
 
         #region Constructor
-        public Character(ContentManager contentManager, Vector2 centerPosition)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="contentManager">contentManager</param>
+        /// <param name="centerPosition">center position of the character</param>
+        /// <param name="row">number of the row where the character is</param>
+        /// <param name="column">number of the column where the character is</param>
+        public Character(ContentManager contentManager, Vector2 centerPosition, int row, int column)
         {
+            this.row = row;
+            this.column = column;
             sprite = contentManager.Load<Texture2D>("character");
             drawRectangle = new Rectangle((int)centerPosition.X - sprite.Width / 2,
                                           (int)centerPosition.Y - sprite.Height / 2,
@@ -31,15 +43,48 @@ namespace FlowerCollector1
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// Return the number of the row where the character is
+        /// </summary>
+        public int Row 
+        {
+            get { return row; }
+        }
+
+        /// <summary>
+        /// Return the number of the column where the character is
+        /// </summary>
+        public int Column 
+        {
+            get { return column; }
+        }
+
+        /// <summary>
+        /// Move the character on the given position of the object and sets the number of row and column
+        /// </summary>
+        /// <param name="centerPosition">center position of the object</param>
+        /// <param name="row">number of the row</param>
+        /// <param name="column">number of the column</param>
+        public void Move(Vector2 centerPosition, int row, int column) 
+        {
+            drawRectangle.X = (int)centerPosition.X - sprite.Width / 2;
+            drawRectangle.Y = (int)centerPosition.Y - sprite.Height / 2;
+            this.row = row;
+            this.column = column;
+        }
         #endregion
 
         #region Public methods
 
-        public void Update(MouseState mouse) 
+        public void Update() 
         {
 
         }
-
+        /// <summary>
+        /// Draws the character where it has centered
+        /// </summary>
+        /// <param name="spriteBatch">sprite batch</param>
         public void Draw(SpriteBatch spriteBatch) 
         {
             spriteBatch.Draw(sprite, drawRectangle, Color.White);

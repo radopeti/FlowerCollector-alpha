@@ -26,7 +26,6 @@ namespace FlowerCollector1
         //length of the tile
         int sideLenght;
 
-
         #endregion
         
 
@@ -51,6 +50,14 @@ namespace FlowerCollector1
         #region Properties
 
         /// <summary>
+        /// Return the draw rectangle
+        /// </summary>
+        public Rectangle DrawRectangle 
+        {
+            get { return drawRectangle; }
+        }
+
+        /// <summary>
         /// Returns the center position of the tile
         /// </summary>
         public Vector2 Center
@@ -64,9 +71,12 @@ namespace FlowerCollector1
 
         public void Update(GameTime gameTime, MouseState mouse)
         {
-
+            
         }
-
+        /// <summary>
+        /// Draws the tile
+        /// </summary>
+        /// <param name="spriteBatch">the sprite batch</param>
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(tileSprite, drawRectangle, Color.White);

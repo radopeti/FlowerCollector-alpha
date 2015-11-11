@@ -26,6 +26,9 @@ namespace FlowerCollector1
         Tile[,] tiles = new Tile[NUM_ROWS, NUM_COLUMNS];
         //character
         Character collector;
+        //click support
+        bool clickStarted = false;
+        bool buttonReleased = true;
 
         #endregion
 
@@ -45,12 +48,12 @@ namespace FlowerCollector1
                 for (int j = 0; j < NUM_COLUMNS; j++)
                 {
                     tiles[i, j] = new Tile(contentManager, 
-                        (int)boardPosition.X + (BORDER_SIZE * (j + 1)) + j * 64,
-                        (int)boardPosition.Y + (BORDER_SIZE * (i + 1)) + i * 64);
+                                          (int)boardPosition.X + (BORDER_SIZE * (j + 1)) + j * 64,
+                                          (int)boardPosition.Y + (BORDER_SIZE * (i + 1)) + i * 64);
                 }
             }
 
-            collector = new Character(contentManager, tiles[0, 0].Center);
+            collector = new Character(contentManager, tiles[0, 0].Center, 0, 0);
         }
 
         #endregion
@@ -59,12 +62,41 @@ namespace FlowerCollector1
         #endregion
 
         #region Public methods
+
         public void Update(GameTime gameTime, MouseState mouse) 
         {
-        
+            for (int i = 0; i < NUM_ROWS; i++)
+            {
+                for (int j = 0; j < NUM_COLUMNS; j++)
+                {
+                    if (tiles[i, j].DrawRectangle.Contains(mouse.X, mouse.Y) &&
+                        (Math.Abs(collector.Row - i) == 1 ||
+                        Math.Abs(collector.Column - j) == 1))
+                    {
+                        if (mouse.LeftButton == ButtonState.Pressed && buttonReleased)
+                        {
+                            buttonReleased = false;
+                            clickStarted = true;
+                        }
+                        else if (mouse.LeftButton == ButtonState.Released)
+                        {
+                            buttonReleased = true;
+                            if (clickStarted)
+                            {
+                                clickStarted = false;
+                                collector.Move(tiles[i, j].Center, i, j);
+                            }
+                        }
+                    }
+                }
+            }     
         }
 
-        public void Draw(SpriteBatch spriteBatch) 
+        /// <summary>
+        /// Draws the tiles and the character
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        public void Draw(SpriteBatch spriteBatch)
         {
             for (int i = 0; i < NUM_ROWS; i++)
             {

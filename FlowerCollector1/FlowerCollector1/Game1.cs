@@ -19,11 +19,13 @@ namespace FlowerCollector1
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Board gameBoard;
+        MouseState mouse;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            IsMouseVisible = true;
         }
 
         /// <summary>
@@ -73,6 +75,8 @@ namespace FlowerCollector1
                 this.Exit();
 
             // TODO: Add your update logic here
+            mouse = Mouse.GetState();
+            gameBoard.Update(gameTime, mouse);
 
             base.Update(gameTime);
         }
