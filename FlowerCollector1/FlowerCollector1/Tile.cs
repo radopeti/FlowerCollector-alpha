@@ -15,13 +15,23 @@ namespace FlowerCollector1
     class Tile
     {
         #region Fields
-        #endregion
+
         //tile texture
         Texture2D tileSprite;
         Rectangle drawRectangle;
 
-        #region Constructor
+        //center position of the tile
+        Vector2 center;
+
+        //length of the tile
+        int sideLenght;
+
+
         #endregion
+        
+
+        #region Constructor
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -32,21 +42,38 @@ namespace FlowerCollector1
         {
             tileSprite = contentManager.Load<Texture2D>("tile");
             drawRectangle = new Rectangle(positionX, positionY, tileSprite.Width, tileSprite.Height);
+            this.sideLenght = tileSprite.Width;
+            center = new Vector2(positionX + sideLenght / 2, positionY + sideLenght / 2);
         }
-        #region Properties
+
         #endregion
 
-        #region Public methods
+        #region Properties
+
+        /// <summary>
+        /// Returns the center position of the tile
+        /// </summary>
+        public Vector2 Center
+        {
+            get { return center; }
+        }
+
         #endregion
-        public void Update(GameTime gameTime, MouseState mouse) 
+        
+        #region Public methods
+
+        public void Update(GameTime gameTime, MouseState mouse)
         {
 
         }
 
-        public void Draw(SpriteBatch spriteBatch) 
+        public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(tileSprite, drawRectangle, Color.White);
         }
+
+        #endregion
+       
         #region Private methods
         #endregion
     }

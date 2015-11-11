@@ -18,7 +18,7 @@ namespace FlowerCollector1
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-
+        Board gameBoard;
 
         public Game1()
         {
@@ -49,7 +49,7 @@ namespace FlowerCollector1
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            
+            gameBoard = new Board(Content, new Vector2(0,0));
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace FlowerCollector1
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
-            
+            gameBoard.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);
