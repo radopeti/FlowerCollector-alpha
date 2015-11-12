@@ -28,10 +28,10 @@ namespace FlowerCollector1
 
         #region Constructor
 
-        public Flower(ContentManager contentManager, Vector2 centerPosition) 
+        public Flower(ContentManager contentManager, Vector2 centerPosition, String spriteName) 
         {
             active = true;
-            sprite = contentManager.Load<Texture2D>("flower" + rand.Next(3));
+            sprite = contentManager.Load<Texture2D>(spriteName);
             drawRectangle = new Rectangle((int)centerPosition.X - sprite.Width / 2,
                                           (int)centerPosition.Y - sprite.Height / 2,
                                           sprite.Width, sprite.Height);

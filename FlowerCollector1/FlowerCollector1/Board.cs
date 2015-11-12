@@ -24,6 +24,8 @@ namespace FlowerCollector1
                 const int NUM_COLUMNS = 5;
                 const int BORDER_SIZE = 5;
 
+                const int INITIAL_MINE_NUMBER = 3;
+
             //tiles
                 Tile[,] tiles = new Tile[NUM_ROWS, NUM_COLUMNS];
 
@@ -32,16 +34,20 @@ namespace FlowerCollector1
 
             //landmines
                 List<LandMine> landmines;
+                int maxNumberOfMines;
 
             //flowers
                 List<Flower> flowers;
-
+                
             //explosion
                 Explosion explosion;
 
             //click support
                 bool clickStarted = false;
                 bool buttonReleased = true;
+
+            //random number generator
+                Random rand = new Random();
 
         #endregion
 
@@ -52,10 +58,11 @@ namespace FlowerCollector1
         /// Creates a matrix with tiles
         /// </summary>
         /// <param name="contentManager"></param>
-        public Board(ContentManager contentManager, Vector2 boardPosition) 
+        public Board(ContentManager contentManager, Vector2 boardPosition)
         {
             this.boardPosition = boardPosition;
             landmines = new List<LandMine>();
+            maxNumberOfMines = INITIAL_MINE_NUMBER;
             flowers = new List<Flower>();
 
             for (int i = 0; i < NUM_ROWS; i++)
@@ -68,11 +75,34 @@ namespace FlowerCollector1
                 }
             }
 
-            collector = new Character(contentManager, tiles[0, 0].Center, 0, 0);
-            landmines.Add(new LandMine(contentManager, tiles[0, 1].Center));
-            flowers.Add(new Flower(contentManager, tiles[0, 2].Center));
-            flowers.Add(new Flower(contentManager, tiles[0, 3].Center));
-            flowers.Add(new Flower(contentManager, tiles[0, 4].Center));
+            //placing the collector
+            int row = GenerateRandomRow();
+            int col = GenerateRandomColumn();
+            collector = new Character(contentManager, tiles[row, col].Center, row, col);
+            tiles[row, col].Reserved = true;
+
+            //placing mines and flowers on tiles
+            int mineCounter = 0;
+            int flowerCounter = 0;
+            while (mineCounter < 5 || flowerCounter < 3)
+            {
+                row = GenerateRandomRow();
+                col = GenerateRandomColumn();
+                if (!tiles[row, col].Reserved && (mineCounter + flowerCounter) % 2 == 0) 
+                {
+                    landmines.Add(new LandMine(contentManager, tiles[row, col].Center));
+                    tiles[row, col].Reserved = true;
+                    mineCounter++;
+                }
+                else if (!tiles[row, col].Reserved && (mineCounter + flowerCounter) % 2 == 1 &&
+                        flowerCounter <= 3)
+                {
+                    flowers.Add(new Flower(contentManager, tiles[row, col].Center, GenerateRandomFlowerName()));
+                    tiles[row, col].Reserved = true;
+                    flowerCounter++;
+                }
+            }
+            
             explosion = new Explosion(contentManager);
         }
 
@@ -161,6 +191,39 @@ namespace FlowerCollector1
         #endregion
 
         #region Private methods
+
+        private int GenerateRandomRow() 
+        {
+            int randomRow = rand.Next(NUM_ROWS);
+            return randomRow;
+        }
+
+        private int GenerateRandomColumn()
+        {
+            int randomColumn = rand.Next(NUM_COLUMNS);
+            return randomColumn;
+        }
+
+        private String GenerateRandomFlowerName()
+        {
+            int random = rand.Next(0, 3);
+            if (random == 0) 
+            {
+                return "flower" + random;
+            }
+            else if (random == 1) 
+            {
+                return "flower" + random;
+            }
+            else if (random == 2)
+            {
+                return "flower" + random;
+            }
+            else
+            {
+                return "flower" + random;
+            }
+        }
         #endregion
     }
 }

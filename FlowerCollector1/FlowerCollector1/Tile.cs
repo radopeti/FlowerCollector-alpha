@@ -26,6 +26,9 @@ namespace FlowerCollector1
         //length of the tile
         int sideLenght;
 
+        //reserved for an object flag
+        bool reserved;
+
         #endregion
         
 
@@ -39,6 +42,7 @@ namespace FlowerCollector1
         /// <param name="positionY">y position of the draw rectangle</param>
         public Tile(ContentManager contentManager, int positionX, int positionY)
         {
+            reserved = false;
             tileSprite = contentManager.Load<Texture2D>("tile");
             drawRectangle = new Rectangle(positionX, positionY, tileSprite.Width, tileSprite.Height);
             this.sideLenght = tileSprite.Width;
@@ -63,6 +67,15 @@ namespace FlowerCollector1
         public Vector2 Center
         {
             get { return center; }
+        }
+
+        /// <summary>
+        /// Reserved property
+        /// </summary>
+        public bool Reserved 
+        {
+            get { return reserved; }
+            set { reserved = value; }
         }
 
         #endregion
