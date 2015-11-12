@@ -58,7 +58,7 @@ namespace FlowerCollector1
         }
 
         /// <summary>
-        /// Returns the center position of the tile
+        /// Return the center position of the tile
         /// </summary>
         public Vector2 Center
         {

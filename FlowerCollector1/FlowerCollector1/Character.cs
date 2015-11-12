@@ -61,26 +61,36 @@ namespace FlowerCollector1
         }
 
         /// <summary>
+        /// Return the draw rectangle of the character
+        /// </summary>
+        public Rectangle DrawRectangle
+        {
+            get { return drawRectangle; }
+        }
+
+        #endregion
+
+        #region Public methods
+
+        /// <summary>
         /// Move the character on the given position of the object and sets the number of row and column
         /// </summary>
         /// <param name="centerPosition">center position of the object</param>
         /// <param name="row">number of the row</param>
         /// <param name="column">number of the column</param>
-        public void Move(Vector2 centerPosition, int row, int column) 
+        public void Move(Vector2 centerPosition, int row, int column)
         {
             drawRectangle.X = (int)centerPosition.X - sprite.Width / 2;
             drawRectangle.Y = (int)centerPosition.Y - sprite.Height / 2;
             this.row = row;
             this.column = column;
         }
-        #endregion
-
-        #region Public methods
 
         public void Update() 
         {
 
         }
+
         /// <summary>
         /// Draws the character where it has centered
         /// </summary>
