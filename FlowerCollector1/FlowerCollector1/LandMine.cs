@@ -21,6 +21,8 @@ namespace FlowerCollector1
         Rectangle drawRectangle;
         //active flag
         bool active;
+        //center position of the landmine
+        Vector2 center;
 
         #endregion
 
@@ -33,6 +35,7 @@ namespace FlowerCollector1
         public LandMine(ContentManager contentManager, Vector2 centerPosition)
         {
             active = true;
+            center = centerPosition;
             sprite = contentManager.Load<Texture2D>("landmine");
             drawRectangle = new Rectangle((int)centerPosition.X - sprite.Width / 2,
                                           (int)centerPosition.Y - sprite.Height / 2,
@@ -60,7 +63,17 @@ namespace FlowerCollector1
             get { return drawRectangle; }
         }
 
+        /// <summary>
+        /// Return the center of the landmine
+        /// </summary>
+        public Vector2 Center 
+        {
+            get { return center; }
+        }
+
         #endregion
+
+
 
         #region Public methods
 

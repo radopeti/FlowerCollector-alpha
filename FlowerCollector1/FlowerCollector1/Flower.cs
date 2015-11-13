@@ -23,6 +23,8 @@ namespace FlowerCollector1
         bool active;
         //random number generator
         Random rand = new Random();
+        //center position of the flower
+        Vector2 center;
 
         #endregion
 
@@ -31,6 +33,7 @@ namespace FlowerCollector1
         public Flower(ContentManager contentManager, Vector2 centerPosition, String spriteName) 
         {
             active = true;
+            center = centerPosition;
             sprite = contentManager.Load<Texture2D>(spriteName);
             drawRectangle = new Rectangle((int)centerPosition.X - sprite.Width / 2,
                                           (int)centerPosition.Y - sprite.Height / 2,
@@ -41,9 +44,29 @@ namespace FlowerCollector1
 
         #region Properties
 
+        /// <summary>
+        /// Return if the flower active or not
+        /// </summary>
         public bool Active 
         {
             get { return active; }
+            set { active = value; }
+        }
+
+        /// <summary>
+        /// Return the draw rectangle of the flower
+        /// </summary>
+        public Rectangle DrawRectangle
+        {
+            get { return drawRectangle; }
+        }
+
+        /// <summary>
+        /// Return the center of the flower
+        /// </summary>
+        public Vector2 Center
+        {
+            get { return center; }
         }
 
         #endregion

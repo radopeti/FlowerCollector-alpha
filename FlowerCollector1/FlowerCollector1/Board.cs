@@ -53,58 +53,58 @@ namespace FlowerCollector1
 
         #region Constructor
 
-        /// <summary>
-        /// Counstructor
-        /// Creates a matrix with tiles
-        /// </summary>
-        /// <param name="contentManager"></param>
-        public Board(ContentManager contentManager, Vector2 boardPosition)
-        {
-            this.boardPosition = boardPosition;
-            landmines = new List<LandMine>();
-            maxNumberOfMines = INITIAL_MINE_NUMBER;
-            flowers = new List<Flower>();
-
-            for (int i = 0; i < NUM_ROWS; i++)
+            /// <summary>
+            /// Counstructor
+            /// Creates a matrix with tiles
+            /// </summary>
+            /// <param name="contentManager"></param>
+            public Board(ContentManager contentManager, Vector2 boardPosition)
             {
-                for (int j = 0; j < NUM_COLUMNS; j++)
-                {
-                    tiles[i, j] = new Tile(contentManager, 
-                                          (int)boardPosition.X + (BORDER_SIZE * (j + 1)) + j * 64,
-                                          (int)boardPosition.Y + (BORDER_SIZE * (i + 1)) + i * 64);
-                }
-            }
+                this.boardPosition = boardPosition;
+                landmines = new List<LandMine>();
+                maxNumberOfMines = INITIAL_MINE_NUMBER;
+                flowers = new List<Flower>();
 
-            //placing the collector
-            int row = GenerateRandomRow();
-            int col = GenerateRandomColumn();
-            collector = new Character(contentManager, tiles[row, col].Center, row, col);
-            tiles[row, col].Reserved = true;
+                for (int i = 0; i < NUM_ROWS; i++)
+                {
+                    for (int j = 0; j < NUM_COLUMNS; j++)
+                    {
+                        tiles[i, j] = new Tile(contentManager, 
+                                                (int)boardPosition.X + (BORDER_SIZE * (j + 1)) + j * 64,
+                                                (int)boardPosition.Y + (BORDER_SIZE * (i + 1)) + i * 64);
+                    }
+                }
 
-            //placing mines and flowers on tiles
-            int mineCounter = 0;
-            int flowerCounter = 0;
-            while (mineCounter < 5 || flowerCounter < 3)
-            {
-                row = GenerateRandomRow();
-                col = GenerateRandomColumn();
-                if (!tiles[row, col].Reserved && (mineCounter + flowerCounter) % 2 == 0) 
+                //placing the collector
+                int row = GenerateRandomRow();
+                int col = GenerateRandomColumn();
+                collector = new Character(contentManager, tiles[row, col].Center, row, col);
+                tiles[row, col].Reserved = true;
+
+                //placing mines and flowers on tiles
+                int mineCounter = 0;
+                int flowerCounter = 0;
+                while (mineCounter < 5 || flowerCounter < 3)
                 {
-                    landmines.Add(new LandMine(contentManager, tiles[row, col].Center));
-                    tiles[row, col].Reserved = true;
-                    mineCounter++;
+                    row = GenerateRandomRow();
+                    col = GenerateRandomColumn();
+                    if (!tiles[row, col].Reserved && (mineCounter + flowerCounter) % 2 == 0) 
+                    {
+                        landmines.Add(new LandMine(contentManager, tiles[row, col].Center));
+                        tiles[row, col].Reserved = true;
+                        mineCounter++;
+                    }
+                    else if (!tiles[row, col].Reserved && (mineCounter + flowerCounter) % 2 == 1 &&
+                            flowerCounter <= 3)
+                    {
+                        flowers.Add(new Flower(contentManager, tiles[row, col].Center, GenerateRandomFlowerName()));
+                        tiles[row, col].Reserved = true;
+                        flowerCounter++;
+                    }
                 }
-                else if (!tiles[row, col].Reserved && (mineCounter + flowerCounter) % 2 == 1 &&
-                        flowerCounter <= 3)
-                {
-                    flowers.Add(new Flower(contentManager, tiles[row, col].Center, GenerateRandomFlowerName()));
-                    tiles[row, col].Reserved = true;
-                    flowerCounter++;
-                }
-            }
             
-            explosion = new Explosion(contentManager);
-        }
+                explosion = new Explosion(contentManager);
+            }
 
         #endregion
 
@@ -113,117 +113,165 @@ namespace FlowerCollector1
 
         #region Public methods
 
-        /// <summary>
-        /// Update the board
-        /// </summary>
-        /// <param name="gameTime">the game time</param>
-        /// <param name="mouse">mouse input</param>
-        public void Update(GameTime gameTime, MouseState mouse) 
-        {
-            for (int i = 0; i < NUM_ROWS; i++)
+            /// <summary>
+            /// Update the board
+            /// </summary>
+            /// <param name="gameTime">the game time</param>
+            /// <param name="mouse">mouse input</param>
+            public void Update(GameTime gameTime, MouseState mouse) 
             {
-                for (int j = 0; j < NUM_COLUMNS; j++)
+                for (int i = 0; i < NUM_ROWS; i++)
                 {
-                    //check mouseclicks on tiles, if it's one step to up, down, left of right
-                    if (tiles[i, j].DrawRectangle.Contains(mouse.X, mouse.Y) &&
-                        ((collector.Row == i || collector.Column == j) 
-                        && 
-                        (Math.Abs(collector.Row - i) == 1 || Math.Abs(collector.Column - j) == 1)))
+                    for (int j = 0; j < NUM_COLUMNS; j++)
                     {
-                        if (mouse.LeftButton == ButtonState.Pressed && buttonReleased)
+                        //check mouseclicks on tiles, if it's one step to up, down, left of right
+                        if (tiles[i, j].DrawRectangle.Contains(mouse.X, mouse.Y) &&
+                            ((collector.Row == i || collector.Column == j) 
+                            && 
+                            (Math.Abs(collector.Row - i) == 1 || Math.Abs(collector.Column - j) == 1)))
                         {
-                            buttonReleased = false;
-                            clickStarted = true;
-                        }
-                        else if (mouse.LeftButton == ButtonState.Released)
-                        {
-                            buttonReleased = true;
-                            if (clickStarted)
+                            if (mouse.LeftButton == ButtonState.Pressed && buttonReleased)
                             {
-                                clickStarted = false;
-                                collector.Move(tiles[i, j].Center, i, j);
+                                buttonReleased = false;
+                                clickStarted = true;
+                            }
+                            else if (mouse.LeftButton == ButtonState.Released)
+                            {
+                                buttonReleased = true;
+                                if (clickStarted)
+                                {
+                                    clickStarted = false;
+                                    collector.Move(tiles[i, j].Center, i, j);
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            //remove inactive landmines
-
-            //update explosion
-            explosion.Update(gameTime);
-        }
-
-        /// <summary>
-        /// Draws the tiles and the character
-        /// </summary>
-        /// <param name="spriteBatch"></param>
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            //draw tiles
-            for (int i = 0; i < NUM_ROWS; i++)
-            {
-                for (int j = 0; j < NUM_COLUMNS; j++)
+                //check for collision between collector and landmines
+                foreach (LandMine landmine in landmines) 
                 {
-                    tiles[i, j].Draw(spriteBatch);
+                    if (landmine.DrawRectangle.Intersects(collector.DrawRectangle))
+                    {
+                        explosion.Play(landmine.Center);
+                        landmine.Active = false;
+                    }
                 }
+
+                //check for collision between collector and flowers
+                foreach (Flower flower in flowers)
+                {
+                    if (flower.DrawRectangle.Intersects(collector.DrawRectangle))
+                    {
+                        flower.Active = false;
+                    }
+                }
+
+                //remove inactive landmines
+                for (int i = landmines.Count - 1; i >= 0; i--) 
+                {
+                    if (!landmines[i].Active)
+                    {
+                        landmines.RemoveAt(i);
+                    }
+                }
+
+                //remove inactive flowers
+                for (int i = flowers.Count - 1; i >= 0; i--)
+                {
+                    if (!flowers[i].Active)
+                    {
+                        flowers.RemoveAt(i);
+                    }
+                }
+
+                //update explosion
+                explosion.Update(gameTime);
             }
 
-            //draw the collector Character
-            collector.Draw(spriteBatch);
-
-            //draw landmines
-            foreach (LandMine landmine in landmines)
+            /// <summary>
+            /// Draws the tiles and the character
+            /// </summary>
+            /// <param name="spriteBatch"></param>
+            public void Draw(SpriteBatch spriteBatch)
             {
-                landmine.Draw(spriteBatch);
-            }
+                //draw tiles
+                for (int i = 0; i < NUM_ROWS; i++)
+                {
+                    for (int j = 0; j < NUM_COLUMNS; j++)
+                    {
+                        tiles[i, j].Draw(spriteBatch);
+                    }
+                }
 
-            //draw flowers
-            foreach (Flower flower in flowers) 
-            {
-                flower.Draw(spriteBatch);
-            }
+                //draw the collector Character
+                collector.Draw(spriteBatch);
 
-            //draw explosion
-            explosion.Draw(spriteBatch);
-        }
+                //draw landmines
+                foreach (LandMine landmine in landmines)
+                {
+                    landmine.Draw(spriteBatch);
+                }
+
+                //draw flowers
+                foreach (Flower flower in flowers) 
+                {
+                    flower.Draw(spriteBatch);
+                }
+
+                //draw explosion
+                explosion.Draw(spriteBatch);
+            }
 
         #endregion
 
         #region Private methods
+            
+            /// <summary>
+            /// Return a random number between 0 and the maximum number of rows
+            /// </summary>
+            /// <returns></returns>
+            private int GenerateRandomRow() 
+            {
+                int randomRow = rand.Next(NUM_ROWS);
+                return randomRow;
+            }
+            
+            /// <summary>
+            /// Return a random number between 0 and the maximum number of columns
+            /// </summary>
+            /// <returns></returns>
+            private int GenerateRandomColumn()
+            {
+                int randomColumn = rand.Next(NUM_COLUMNS);
+                return randomColumn;
+            }
+            
+            /// <summary>
+            /// Return a flower file name
+            /// </summary>
+            /// <returns></returns>
+            private String GenerateRandomFlowerName()
+            {
+                int random = rand.Next(0, 3);
+                if (random == 0) 
+                {
+                    return "flower" + random;
+                }
+                else if (random == 1) 
+                {
+                    return "flower" + random;
+                }
+                else if (random == 2)
+                {
+                    return "flower" + random;
+                }
+                else
+                {
+                    return "flower" + random;
+                }
+            }
 
-        private int GenerateRandomRow() 
-        {
-            int randomRow = rand.Next(NUM_ROWS);
-            return randomRow;
-        }
-
-        private int GenerateRandomColumn()
-        {
-            int randomColumn = rand.Next(NUM_COLUMNS);
-            return randomColumn;
-        }
-
-        private String GenerateRandomFlowerName()
-        {
-            int random = rand.Next(0, 3);
-            if (random == 0) 
-            {
-                return "flower" + random;
-            }
-            else if (random == 1) 
-            {
-                return "flower" + random;
-            }
-            else if (random == 2)
-            {
-                return "flower" + random;
-            }
-            else
-            {
-                return "flower" + random;
-            }
-        }
         #endregion
     }
 }
