@@ -49,6 +49,11 @@ namespace FlowerCollector1
             //random number generator
                 Random rand = new Random();
 
+            //sound support
+                AudioEngine audioEngine;
+                WaveBank waveBank;
+                SoundBank soundBank;
+
         #endregion
 
         #region Constructor
@@ -64,6 +69,10 @@ namespace FlowerCollector1
                 landmines = new List<LandMine>();
                 maxNumberOfMines = INITIAL_MINE_NUMBER;
                 flowers = new List<Flower>();
+
+                audioEngine = new AudioEngine(@"Content\sounds.xgs");
+                waveBank = new WaveBank(audioEngine, @"Content\Wave Bank.xwb");
+                soundBank = new SoundBank(audioEngine, @"Content\Sound Bank.xsb");
 
                 for (int i = 0; i < NUM_ROWS; i++)
                 {
@@ -84,7 +93,7 @@ namespace FlowerCollector1
                 //placing mines and flowers on tiles
                 int mineCounter = 0;
                 int flowerCounter = 0;
-                while (mineCounter < 5 || flowerCounter < 3)
+                while (mineCounter < 5)
                 {
                     row = GenerateRandomRow();
                     col = GenerateRandomColumn();
@@ -95,7 +104,7 @@ namespace FlowerCollector1
                         mineCounter++;
                     }
                     else if (!tiles[row, col].Reserved && (mineCounter + flowerCounter) % 2 == 1 &&
-                            flowerCounter <= 3)
+                            flowerCounter <= 6)
                     {
                         flowers.Add(new Flower(contentManager, tiles[row, col].Center, GenerateRandomFlowerName()));
                         tiles[row, col].Reserved = true;
@@ -155,6 +164,7 @@ namespace FlowerCollector1
                     {
                         explosion.Play(landmine.Center);
                         landmine.Active = false;
+                        soundBank.PlayCue("explosion");
                     }
                 }
 
@@ -164,6 +174,7 @@ namespace FlowerCollector1
                     if (flower.DrawRectangle.Intersects(collector.DrawRectangle))
                     {
                         flower.Active = false;
+                        soundBank.PlayCue("success");
                     }
                 }
 
@@ -253,7 +264,7 @@ namespace FlowerCollector1
             /// <returns></returns>
             private String GenerateRandomFlowerName()
             {
-                int random = rand.Next(0, 3);
+                int random = rand.Next(0,3);
                 if (random == 0) 
                 {
                     return "flower" + random;
@@ -268,7 +279,7 @@ namespace FlowerCollector1
                 }
                 else
                 {
-                    return "flower" + random;
+                    return null;
                 }
             }
 

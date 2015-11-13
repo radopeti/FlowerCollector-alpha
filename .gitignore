@@ -18,3 +18,12 @@ FlowerCollector1/FlowerCollector1Content/obj/x86/Debug/FlowerCollector1Content.c
 FlowerCollector1/FlowerCollector1/obj/x86/Debug/FlowerCollector1.pdb
 *.xml
 FlowerCollector1/FlowerCollector1/FlowerCollector1.csproj.Debug.cachefile
+*.deploy
+*.xwb
+FlowerCollector1/FlowerCollector1/bin/x86/Debug/Content/sounds.xgs
+*.application
+*.wav
+FlowerCollector1/FlowerCollector1Content/sounds.xap
+*.manifest
+FlowerCollector1/FlowerCollector1/bin/x86/Debug/Content/Sound Bank.xsb
+*.pfx
