@@ -52,6 +52,7 @@ namespace FlowerCollector1
 
             // TODO: use this.Content to load your game content here
             gameBoard = new Board(Content, new Vector2(0,0));
+
         }
 
         /// <summary>
