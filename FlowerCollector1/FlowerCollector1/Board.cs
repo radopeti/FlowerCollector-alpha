@@ -157,6 +157,28 @@ namespace FlowerCollector1
                     }
                 }
 
+                //Keyboard controls 
+                //Must add code, to move only when the control buttons pressed only ONCE at the time
+
+                //if (Keyboard.GetState().IsKeyDown(Keys.Up))
+                //{
+                //    int row = collector.Row - 1;
+                //    int col = collector.Column;
+                //    collector.Move(tiles[row, col].Center, row, col);
+                //}
+                //else if (Keyboard.GetState().IsKeyDown(Keys.Down))
+                //{
+                    
+                //}
+                //else if (Keyboard.GetState().IsKeyDown(Keys.Left))
+                //{
+                    
+                //}
+                //else if (Keyboard.GetState().IsKeyDown(Keys.Right))
+                //{
+                    
+                //}
+
                 //check for collision between collector and landmines
                 foreach (LandMine landmine in landmines) 
                 {

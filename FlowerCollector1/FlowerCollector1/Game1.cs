@@ -25,6 +25,7 @@ namespace FlowerCollector1
 
         //menubuttons
         Button playButton;
+        Button quitButton;
 
         public Game1()
         {
@@ -60,6 +61,7 @@ namespace FlowerCollector1
             gameBoard = new Board(Content, new Vector2(0,0));
             //menubuttons
             playButton = new Button(Content, "play_button", GameState.Play, 20, 20);
+            quitButton = new Button(Content, "quit_button", GameState.Quit, 20, 90);
 
         }
 
@@ -87,10 +89,27 @@ namespace FlowerCollector1
             
 
             mouse = Mouse.GetState();
-            //menubuttons
-            playButton.Update(mouse);
-            //board
-            gameBoard.Update(gameTime, mouse);
+            
+            switch (gameState) 
+            {
+                case GameState.Menu:
+                    //menubuttons
+                    playButton.Update(mouse);
+                    quitButton.Update(mouse);
+                break;
+
+                case GameState.Play:
+                //board
+                gameBoard.Update(gameTime, mouse);
+                break;
+
+                case GameState.Quit:
+                    this.Exit();
+                break;
+            }
+            
+            
+            
 
             base.Update(gameTime);
         }
@@ -106,13 +125,15 @@ namespace FlowerCollector1
             // TODO: Add your drawing code here
             spriteBatch.Begin();
 
-            if (gameState == GameState.Play) 
-            {
-                gameBoard.Draw(spriteBatch);
-            }
-            else if (gameState == GameState.Menu) 
+            
+            if (gameState == GameState.Menu) 
             {
                 playButton.Draw(spriteBatch);
+                quitButton.Draw(spriteBatch);
+            }
+            else if (gameState == GameState.Play)
+            {
+                gameBoard.Draw(spriteBatch);
             }
             
 

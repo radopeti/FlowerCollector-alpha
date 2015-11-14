@@ -50,6 +50,7 @@ namespace FlowerCollector1
         public int Row 
         {
             get { return row; }
+            set { row = value; }
         }
 
         /// <summary>
@@ -58,6 +59,7 @@ namespace FlowerCollector1
         public int Column 
         {
             get { return column; }
+            set { column = value; }
         }
 
         /// <summary>

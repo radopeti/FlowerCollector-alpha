@@ -11,6 +11,7 @@ namespace FlowerCollector1
     public enum GameState
     {
         Menu,
-        Play
+        Play,
+        Quit
     }
 }
