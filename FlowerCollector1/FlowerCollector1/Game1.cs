@@ -21,6 +21,11 @@ namespace FlowerCollector1
         Board gameBoard;
         MouseState mouse;
 
+        public static GameState gameState = GameState.Menu;
+
+        //menubuttons
+        Button playButton;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -51,7 +56,10 @@ namespace FlowerCollector1
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            //board
             gameBoard = new Board(Content, new Vector2(0,0));
+            //menubuttons
+            playButton = new Button(Content, "play_button", GameState.Play, 20, 20);
 
         }
 
@@ -76,7 +84,12 @@ namespace FlowerCollector1
                 this.Exit();
 
             // TODO: Add your update logic here
+            
+
             mouse = Mouse.GetState();
+            //menubuttons
+            playButton.Update(mouse);
+            //board
             gameBoard.Update(gameTime, mouse);
 
             base.Update(gameTime);
@@ -92,10 +105,26 @@ namespace FlowerCollector1
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
-            gameBoard.Draw(spriteBatch);
+
+            if (gameState == GameState.Play) 
+            {
+                gameBoard.Draw(spriteBatch);
+            }
+            else if (gameState == GameState.Menu) 
+            {
+                playButton.Draw(spriteBatch);
+            }
+            
+
             spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+
+        public static void ChangeGameState(GameState newState) 
+        {
+            gameState = newState;
         }
     }
 }
