@@ -86,8 +86,6 @@ namespace FlowerCollector1
                 this.Exit();
 
             // TODO: Add your update logic here
-            
-
             mouse = Mouse.GetState();
             
             switch (gameState) 
@@ -99,17 +97,15 @@ namespace FlowerCollector1
                 break;
 
                 case GameState.Play:
-                //board
-                gameBoard.Update(gameTime, mouse);
+                    //board
+                    gameBoard.HideLandMines(gameTime);
+                    gameBoard.Update(gameTime, mouse);
                 break;
 
                 case GameState.Quit:
                     this.Exit();
                 break;
             }
-            
-            
-            
 
             base.Update(gameTime);
         }

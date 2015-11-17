@@ -54,6 +54,10 @@ namespace FlowerCollector1
                 WaveBank waveBank;
                 SoundBank soundBank;
 
+            //timer
+                int elapsedTime = 0;
+                const int LANDMINE_VISIBILITY = 2000;
+
         #endregion
 
         #region Constructor
@@ -73,16 +77,9 @@ namespace FlowerCollector1
                 audioEngine = new AudioEngine(@"Content\sounds.xgs");
                 waveBank = new WaveBank(audioEngine, @"Content\Wave Bank.xwb");
                 soundBank = new SoundBank(audioEngine, @"Content\Sound Bank.xsb");
-
-                for (int i = 0; i < NUM_ROWS; i++)
-                {
-                    for (int j = 0; j < NUM_COLUMNS; j++)
-                    {
-                        tiles[i, j] = new Tile(contentManager, 
-                                                (int)boardPosition.X + (BORDER_SIZE * (j + 1)) + j * 64,
-                                                (int)boardPosition.Y + (BORDER_SIZE * (i + 1)) + i * 64);
-                    }
-                }
+                
+                //generate tile matrix
+                GenerateTileMatrix(contentManager, NUM_ROWS, NUM_COLUMNS, boardPosition);
 
                 //placing the collector
                 int row = GenerateRandomRow();
@@ -91,27 +88,10 @@ namespace FlowerCollector1
                 tiles[row, col].Reserved = true;
 
                 //placing mines and flowers on tiles
-                int mineCounter = 0;
-                int flowerCounter = 0;
-                while (mineCounter < 5)
-                {
-                    row = GenerateRandomRow();
-                    col = GenerateRandomColumn();
-                    if (!tiles[row, col].Reserved && (mineCounter + flowerCounter) % 2 == 0) 
-                    {
-                        landmines.Add(new LandMine(contentManager, tiles[row, col].Center));
-                        tiles[row, col].Reserved = true;
-                        mineCounter++;
-                    }
-                    else if (!tiles[row, col].Reserved && (mineCounter + flowerCounter) % 2 == 1 &&
-                            flowerCounter <= 6)
-                    {
-                        flowers.Add(new Flower(contentManager, tiles[row, col].Center, GenerateRandomFlowerName()));
-                        tiles[row, col].Reserved = true;
-                        flowerCounter++;
-                    }
-                }
-            
+                AddLandMines(contentManager, 5);
+                AddFlowers(contentManager, 3);
+
+                //add explosion
                 explosion = new Explosion(contentManager);
             }
 
@@ -121,7 +101,7 @@ namespace FlowerCollector1
         #endregion
 
         #region Public methods
-
+            
             /// <summary>
             /// Update the board
             /// </summary>
@@ -256,6 +236,86 @@ namespace FlowerCollector1
                 explosion.Draw(spriteBatch);
             }
 
+            /// <summary>
+            /// Generate a rows x cols Tile Matrix
+            /// </summary>
+            /// <param name="contentManager"></param>
+            /// <param name="rows"></param>
+            /// <param name="columns"></param>
+            public void GenerateTileMatrix(ContentManager contentManager, int rows, int columns, Vector2 boardPosition)
+            {
+                //generate tiles
+                for (int i = 0; i < rows; i++)
+                {
+                    for (int j = 0; j < columns; j++)
+                    {
+                        tiles[i, j] = new Tile(contentManager,
+                                                (int)boardPosition.X + (BORDER_SIZE * (j + 1)) + j * 64,
+                                                (int)boardPosition.Y + (BORDER_SIZE * (i + 1)) + i * 64);
+                    }
+                }
+            }
+
+            /// <summary>
+            /// Add landmines on the tile matrix
+            /// </summary>
+            /// <param name="contentManager">content manager</param>
+            /// <param name="numberOfLandMines">nummber of landmines</param>
+            public void AddLandMines(ContentManager contentManager, int numberOfLandMines)
+            {
+                int mineCounter = 0;
+                int row;
+                int col;
+                while (mineCounter < numberOfLandMines)
+                {
+                    row = GenerateRandomRow();
+                    col = GenerateRandomColumn();
+                    if (!tiles[row, col].Reserved)
+                    {
+                        landmines.Add(new LandMine(contentManager, tiles[row, col].Center));
+                        tiles[row, col].Reserved = true;
+                        mineCounter++;
+                    }
+                }
+            }
+
+            /// <summary>
+            /// Add flowers on the tile matrix
+            /// </summary>
+            /// <param name="contentManager">content manager</param>
+            /// <param name="numberOfFlowers">nummber of flowers</param>
+            public void AddFlowers(ContentManager contentManager, int numberOfFlowers)
+            {
+                int flowerCounter = 0;
+                int row;
+                int col;
+                while (flowerCounter < numberOfFlowers)
+                {
+                    row = GenerateRandomRow();
+                    col = GenerateRandomColumn();
+                    if (!tiles[row, col].Reserved)
+                    {
+                        flowers.Add(new Flower(contentManager, tiles[row, col].Center, GenerateRandomFlowerName()));
+                        tiles[row, col].Reserved = true;
+                        flowerCounter++;
+                    }
+                }
+            }
+
+            public void HideLandMines(GameTime gameTime) 
+            {
+                if (elapsedTime < LANDMINE_VISIBILITY)
+                {
+                    elapsedTime += gameTime.ElapsedGameTime.Milliseconds;
+                }
+                else 
+                {
+                    foreach (LandMine landmine in landmines) 
+                    {
+                        landmine.Hidden = true;
+                    }
+                }
+            }
         #endregion
 
         #region Private methods

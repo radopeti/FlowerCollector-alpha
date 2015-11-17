@@ -18,9 +18,12 @@ namespace FlowerCollector1
 
         //texture
         Texture2D sprite;
+        Texture2D emptySprite;
         Rectangle drawRectangle;
         //active flag
         bool active;
+        //hidden flag
+        bool hidden;
         //center position of the landmine
         Vector2 center;
 
@@ -37,6 +40,7 @@ namespace FlowerCollector1
             active = true;
             center = centerPosition;
             sprite = contentManager.Load<Texture2D>("landmine");
+            emptySprite = contentManager.Load<Texture2D>("empty_32x32");
             drawRectangle = new Rectangle((int)centerPosition.X - sprite.Width / 2,
                                           (int)centerPosition.Y - sprite.Height / 2,
                                            sprite.Width, sprite.Height);
@@ -49,7 +53,7 @@ namespace FlowerCollector1
         /// <summary>
         /// Return if the landmine active or not
         /// </summary>
-        public bool Active 
+        public bool Active
         {
             get { return active; }
             set { active = value; }
@@ -71,6 +75,15 @@ namespace FlowerCollector1
             get { return center; }
         }
 
+        /// <summary>
+        /// Hidden property
+        /// </summary>
+        public bool Hidden
+        {
+            get { return hidden; }
+            set { hidden = value; }
+        }
+
         #endregion
 
 
@@ -83,9 +96,16 @@ namespace FlowerCollector1
         /// <param name="spriteBatch"></param>
         public void Draw(SpriteBatch spriteBatch) 
         {
-            if (active) 
+            if (active)
             {
-                spriteBatch.Draw(sprite, drawRectangle, Color.White);
+                if (hidden)
+                {
+                    spriteBatch.Draw(emptySprite, drawRectangle, Color.White);
+                }
+                else 
+                {
+                    spriteBatch.Draw(sprite, drawRectangle, Color.White);
+                }
             }
         }
 
