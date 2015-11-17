@@ -94,8 +94,8 @@ namespace FlowerCollector1
             {
                 case GameState.Menu:
                     //menubuttons
-                    playButton.Update(mouse);
-                    quitButton.Update(mouse);
+                    playButton.Update(gameTime, mouse);
+                    quitButton.Update(gameTime, mouse);
                 break;
 
                 case GameState.Play:

@@ -25,6 +25,10 @@ namespace FlowerCollector1
                 bool buttonReleased = true;
             //gamestate
                 GameState gameState;
+            //timer for button animation
+                int elapsedTime = 0;
+                const int ANIMATION_TIME = 300;
+                bool hasToStop = false;
 
         #endregion
 
@@ -42,27 +46,46 @@ namespace FlowerCollector1
 
         #region Public Methods
 
-            public void Update(MouseState mouse) 
+            public void Update(GameTime gameTime, MouseState mouse) 
             {
-                if (drawRectangle.Contains(mouse.X, mouse.Y) && mouse.LeftButton == ButtonState.Pressed && buttonReleased)
+                if (!hasToStop)
                 {
-                    buttonReleased = false;
-                    clickStarted = true;
-                    if (mouse.LeftButton == ButtonState.Pressed)
+                    if (drawRectangle.Contains(mouse.X, mouse.Y) && mouse.LeftButton == ButtonState.Pressed && buttonReleased)
                     {
-                        buttonReleased = true;
-                        if (clickStarted)
+                        sourceRectangle.X = sprite.Width / 2;
+                        buttonReleased = false;
+                        clickStarted = true;
+                        if (mouse.LeftButton == ButtonState.Pressed)
                         {
-                            clickStarted = false;
-                            sourceRectangle.X = sprite.Width / 2;
-                            Game1.ChangeGameState(gameState);
+                            buttonReleased = true;
+                            if (clickStarted)
+                            {
+                                clickStarted = false;
+                                hasToStop = true; 
+                            }
                         }
                     }
+                    else
+                    {
+                        sourceRectangle.X = 0;
+                        buttonReleased = true;
+                        clickStarted = false;
+                    }
                 }
+                //add delay after click on the button
                 else 
                 {
-                    sourceRectangle.X = 0;
+                    elapsedTime += gameTime.ElapsedGameTime.Milliseconds;
+                    if (elapsedTime > ANIMATION_TIME) 
+                    {
+                        hasToStop = false;
+                        sourceRectangle.X = 0;
+                        Game1.ChangeGameState(gameState);
+                    }
                 }
+
+
+                
             }
 
             public void Draw(SpriteBatch spriteBatch)
