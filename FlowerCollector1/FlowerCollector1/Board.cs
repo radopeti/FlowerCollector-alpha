@@ -145,43 +145,30 @@ namespace FlowerCollector1
                 //Keyboard controls 
                 //Must add code, to move only when the control buttons pressed only ONCE at the time
 
-
-                if (keyboard.IsKeyDown(Keys.Right) && keyboardButtonReleased)
+                if (IsButtonPressed(keyboard, Keys.Left))
                 {
-                    buttonPressStarted = true;
-                    if (buttonPressStarted)
-                    {
-                        keyboardButtonReleased = false;
-                        buttonPressStarted = false;
-                        previousKey = Keys.Right;
-                        int currentRow = collector.Row;
-                        int currentColumn = collector.Column + 1;
-                        collector.Move(tiles[currentRow, currentColumn].Center, currentRow, currentColumn);
-                    }
+                    int currentRow = collector.Row;
+                    int currentColumn = collector.Column - 1;
+                    collector.Move(tiles[currentRow, currentColumn].Center, currentRow, currentColumn);
                 }
-                else if (keyboard.IsKeyUp(Keys.Right) && Keys.Right == previousKey)
+                else if (IsButtonPressed(keyboard, Keys.Right)) 
                 {
-                    keyboardButtonReleased = true;
+                    int currentRow = collector.Row;
+                    int currentColumn = collector.Column + 1;
+                    collector.Move(tiles[currentRow, currentColumn].Center, currentRow, currentColumn);
                 }
-
-                if (keyboard.IsKeyDown(Keys.Left) && keyboardButtonReleased)
+                else if (IsButtonPressed(keyboard, Keys.Up))
                 {
-                    buttonPressStarted = true;
-                    if (buttonPressStarted)
-                    {
-                        keyboardButtonReleased = false;
-                        buttonPressStarted = false;
-                        previousKey = Keys.Left;
-                        int currentRow = collector.Row;
-                        int currentColumn = collector.Column - 1;
-                        collector.Move(tiles[currentRow, currentColumn].Center, currentRow, currentColumn);
-                    }
+                    int currentRow = collector.Row - 1;
+                    int currentColumn = collector.Column;
+                    collector.Move(tiles[currentRow, currentColumn].Center, currentRow, currentColumn);
                 }
-                else if (keyboard.IsKeyUp(Keys.Left) && Keys.Left == previousKey)
+                else if (IsButtonPressed(keyboard, Keys.Down))
                 {
-                    keyboardButtonReleased = true;
+                    int currentRow = collector.Row + 1;
+                    int currentColumn = collector.Column;
+                    collector.Move(tiles[currentRow, currentColumn].Center, currentRow, currentColumn);
                 }
-
 
                 
                 
@@ -395,6 +382,30 @@ namespace FlowerCollector1
                 }
             }
 
+            public bool IsButtonPressed(KeyboardState keyboard, Keys key) 
+            {
+                if (keyboard.IsKeyDown(key) && keyboardButtonReleased)
+                {
+                    buttonPressStarted = true;
+                    if (buttonPressStarted)
+                    {
+                        keyboardButtonReleased = false;
+                        buttonPressStarted = false;
+                        previousKey = key;
+                        return true;
+                    }
+                    return false;
+                }
+                else if (keyboard.IsKeyUp(key) && key == previousKey)
+                {
+                    keyboardButtonReleased = true;
+                    return false;
+                }
+                else
+                {
+                    return false;
+                }
+            }
         #endregion
     }
 }
