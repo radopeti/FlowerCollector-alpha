@@ -44,7 +44,12 @@ namespace FlowerCollector1
 
             //click support
                 bool clickStarted = false;
-                bool buttonReleased = true;
+                bool mouseButtonReleased = true;
+
+            //keyboard button support
+                bool buttonPressStarted = false;
+                bool keyboardButtonReleased = true;
+                Keys previousKey;
 
             //random number generator
                 Random rand = new Random();
@@ -107,7 +112,7 @@ namespace FlowerCollector1
             /// </summary>
             /// <param name="gameTime">the game time</param>
             /// <param name="mouse">mouse input</param>
-            public void Update(GameTime gameTime, MouseState mouse) 
+            public void Update(GameTime gameTime, MouseState mouse, KeyboardState keyboard)
             {
                 for (int i = 0; i < NUM_ROWS; i++)
                 {
@@ -119,14 +124,14 @@ namespace FlowerCollector1
                             && 
                             (Math.Abs(collector.Row - i) == 1 || Math.Abs(collector.Column - j) == 1)))
                         {
-                            if (mouse.LeftButton == ButtonState.Pressed && buttonReleased)
+                            if (mouse.LeftButton == ButtonState.Pressed && mouseButtonReleased)
                             {
-                                buttonReleased = false;
+                                mouseButtonReleased = false;
                                 clickStarted = true;
                             }
                             else if (mouse.LeftButton == ButtonState.Released)
                             {
-                                buttonReleased = true;
+                                mouseButtonReleased = true;
                                 if (clickStarted)
                                 {
                                     clickStarted = false;
@@ -140,24 +145,49 @@ namespace FlowerCollector1
                 //Keyboard controls 
                 //Must add code, to move only when the control buttons pressed only ONCE at the time
 
-                //if (Keyboard.GetState().IsKeyDown(Keys.Up))
-                //{
-                //    int row = collector.Row - 1;
-                //    int col = collector.Column;
-                //    collector.Move(tiles[row, col].Center, row, col);
-                //}
-                //else if (Keyboard.GetState().IsKeyDown(Keys.Down))
-                //{
-                    
-                //}
-                //else if (Keyboard.GetState().IsKeyDown(Keys.Left))
-                //{
-                    
-                //}
-                //else if (Keyboard.GetState().IsKeyDown(Keys.Right))
-                //{
-                    
-                //}
+
+                if (keyboard.IsKeyDown(Keys.Right) && keyboardButtonReleased)
+                {
+                    buttonPressStarted = true;
+                    if (buttonPressStarted)
+                    {
+                        keyboardButtonReleased = false;
+                        buttonPressStarted = false;
+                        previousKey = Keys.Right;
+                        int currentRow = collector.Row;
+                        int currentColumn = collector.Column + 1;
+                        collector.Move(tiles[currentRow, currentColumn].Center, currentRow, currentColumn);
+                    }
+                }
+                else if (keyboard.IsKeyUp(Keys.Right) && Keys.Right == previousKey)
+                {
+                    keyboardButtonReleased = true;
+                }
+
+                if (keyboard.IsKeyDown(Keys.Left) && keyboardButtonReleased)
+                {
+                    buttonPressStarted = true;
+                    if (buttonPressStarted)
+                    {
+                        keyboardButtonReleased = false;
+                        buttonPressStarted = false;
+                        previousKey = Keys.Left;
+                        int currentRow = collector.Row;
+                        int currentColumn = collector.Column - 1;
+                        collector.Move(tiles[currentRow, currentColumn].Center, currentRow, currentColumn);
+                    }
+                }
+                else if (keyboard.IsKeyUp(Keys.Left) && Keys.Left == previousKey)
+                {
+                    keyboardButtonReleased = true;
+                }
+
+
+                
+                
+
+                
+                
 
                 //check for collision between collector and landmines
                 foreach (LandMine landmine in landmines) 

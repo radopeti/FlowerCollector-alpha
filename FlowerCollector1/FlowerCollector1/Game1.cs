@@ -20,6 +20,7 @@ namespace FlowerCollector1
         SpriteBatch spriteBatch;
         Board gameBoard;
         MouseState mouse;
+        KeyboardState keyboard;
 
         public static GameState gameState = GameState.Menu;
 
@@ -87,6 +88,7 @@ namespace FlowerCollector1
 
             // TODO: Add your update logic here
             mouse = Mouse.GetState();
+            keyboard = Keyboard.GetState();
             
             switch (gameState) 
             {
@@ -99,7 +101,7 @@ namespace FlowerCollector1
                 case GameState.Play:
                     //board
                     gameBoard.HideLandMines(gameTime);
-                    gameBoard.Update(gameTime, mouse);
+                    gameBoard.Update(gameTime, mouse, keyboard);
                 break;
 
                 case GameState.Quit:
