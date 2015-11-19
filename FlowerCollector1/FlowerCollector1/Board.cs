@@ -59,10 +59,12 @@ namespace FlowerCollector1
                 WaveBank waveBank;
                 SoundBank soundBank;
 
-            //timer
+            //timer to hide mines
                 int elapsedTime = 0;
                 const int LANDMINE_VISIBILITY = 2000;
-
+            
+            //Countdown timer
+                Timer countdownTimer;
         #endregion
 
         #region Constructor
@@ -98,6 +100,9 @@ namespace FlowerCollector1
 
                 //add explosion
                 explosion = new Explosion(contentManager);
+
+                //add countdown timer
+                countdownTimer = new Timer(contentManager, "timerFont", new Vector2(400, 100), 0, 30);
             }
 
         #endregion
@@ -114,6 +119,8 @@ namespace FlowerCollector1
             /// <param name="mouse">mouse input</param>
             public void Update(GameTime gameTime, MouseState mouse, KeyboardState keyboard)
             {
+                countdownTimer.Start(gameTime);
+
                 for (int i = 0; i < NUM_ROWS; i++)
                 {
                     for (int j = 0; j < NUM_COLUMNS; j++)
@@ -169,12 +176,6 @@ namespace FlowerCollector1
                     int currentColumn = collector.Column;
                     collector.Move(tiles[currentRow, currentColumn].Center, currentRow, currentColumn);
                 }
-
-                
-                
-
-                
-                
 
                 //check for collision between collector and landmines
                 foreach (LandMine landmine in landmines) 
@@ -251,6 +252,9 @@ namespace FlowerCollector1
 
                 //draw explosion
                 explosion.Draw(spriteBatch);
+
+                //draw countdown timer
+                countdownTimer.Draw(spriteBatch);
             }
 
             /// <summary>
@@ -319,11 +323,12 @@ namespace FlowerCollector1
                 }
             }
 
-            public void HideLandMines(GameTime gameTime) 
+            public bool HideLandMines(GameTime gameTime) 
             {
                 if (elapsedTime < LANDMINE_VISIBILITY)
                 {
                     elapsedTime += gameTime.ElapsedGameTime.Milliseconds;
+                    return false;
                 }
                 else 
                 {
@@ -331,6 +336,7 @@ namespace FlowerCollector1
                     {
                         landmine.Hidden = true;
                     }
+                    return true;
                 }
             }
         #endregion
@@ -381,7 +387,13 @@ namespace FlowerCollector1
                     return null;
                 }
             }
-
+            
+            /// <summary>
+            /// Return true if the specifed key pressed and released
+            /// </summary>
+            /// <param name="keyboard">The keyboard</param>
+            /// <param name="key">Key on keyboard</param>
+            /// <returns></returns>
             public bool IsButtonPressed(KeyboardState keyboard, Keys key) 
             {
                 if (keyboard.IsKeyDown(key) && keyboardButtonReleased)
@@ -406,6 +418,7 @@ namespace FlowerCollector1
                     return false;
                 }
             }
+
         #endregion
     }
 }

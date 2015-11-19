@@ -100,8 +100,10 @@ namespace FlowerCollector1
 
                 case GameState.Play:
                     //board
-                    gameBoard.HideLandMines(gameTime);
-                    gameBoard.Update(gameTime, mouse, keyboard);
+                    if (gameBoard.HideLandMines(gameTime)) 
+                    {
+                        gameBoard.Update(gameTime, mouse, keyboard);
+                    }
                 break;
 
                 case GameState.Quit:
