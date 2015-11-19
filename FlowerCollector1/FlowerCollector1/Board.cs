@@ -65,6 +65,9 @@ namespace FlowerCollector1
             
             //Countdown timer
                 Timer countdownTimer;
+            //Lifebar
+                LifeBar lifeBar;
+            
         #endregion
 
         #region Constructor
@@ -102,12 +105,24 @@ namespace FlowerCollector1
                 explosion = new Explosion(contentManager);
 
                 //add countdown timer
-                countdownTimer = new Timer(contentManager, "timerFont", new Vector2(400, 100), 0, 30);
+                countdownTimer = new Timer(contentManager, "timerFont", new Vector2(400, 100), 30);
+
+                //add lifebar
+                lifeBar = new LifeBar(contentManager, new Vector2(400, 200));
             }
 
         #endregion
 
         #region Properties
+
+            /// <summary>
+            /// Return the number of lifes
+            /// </summary>
+            public int LifeBarCount
+            {
+                get { return lifeBar.Count; }
+            }
+
         #endregion
 
         #region Public methods
@@ -184,6 +199,7 @@ namespace FlowerCollector1
                     {
                         explosion.Play(landmine.Center);
                         landmine.Active = false;
+                        lifeBar.Remove();
                         soundBank.PlayCue("explosion");
                     }
                 }
@@ -255,6 +271,9 @@ namespace FlowerCollector1
 
                 //draw countdown timer
                 countdownTimer.Draw(spriteBatch);
+
+                //draw lifebar
+                lifeBar.Draw(spriteBatch);
             }
 
             /// <summary>
@@ -322,7 +341,12 @@ namespace FlowerCollector1
                     }
                 }
             }
-
+            
+            /// <summary>
+            /// Hide all landmines after a short delay
+            /// </summary>
+            /// <param name="gameTime"></param>
+            /// <returns></returns>
             public bool HideLandMines(GameTime gameTime) 
             {
                 if (elapsedTime < LANDMINE_VISIBILITY)
@@ -339,6 +363,7 @@ namespace FlowerCollector1
                     return true;
                 }
             }
+            
         #endregion
 
         #region Private methods
