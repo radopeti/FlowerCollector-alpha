@@ -14,35 +14,49 @@ namespace FlowerCollector1
 {
     class Timer
     {
-        SpriteFont spriteFont;
-        String elapsedTime;
-        float elapsedTimeCounter;
-        Vector2 position;
-        int from;
-        int to;
 
-        bool finished;
+        //Draw sipport
+            SpriteFont spriteFont;
+            String elapsedTime;
+            Vector2 position;
 
-        public Timer(ContentManager contentManager, String spriteFontName, Vector2 position, int from, int to)
+        //second counter support
+            float elapsedTimeCounter; 
+            int start;
+
+        //finished flag
+            bool finished;
+
+
+        /// <summary>
+        /// Timer constructor
+        /// </summary>
+        /// <param name="contentManager">content manager</param>
+        /// <param name="spriteFontName">name of the spritefont content</param>
+        /// <param name="position">position of the timer</param>
+        /// <param name="start"></param>
+        public Timer(ContentManager contentManager, String spriteFontName, Vector2 position, int start)
         {
             spriteFont = contentManager.Load<SpriteFont>(spriteFontName);
             this.position = position;
-            this.from = from;
-            this.to = to;
-            elapsedTimeCounter = from;
-            elapsedTime = from.ToString();
+            this.start = start;
+            elapsedTimeCounter = start;
+            elapsedTime = start.ToString();
         }
 
+        /// <summary>
+        /// Start the timer
+        /// </summary>
+        /// <param name="gameTime">game time</param>
         public void Start(GameTime gameTime)
         {
-            if (from < to)
+            if (start == 0)
             {
                 elapsedTimeCounter += (float)gameTime.ElapsedGameTime.TotalSeconds;
-
                 elapsedTime = ((int)elapsedTimeCounter).ToString();
             }
 
-            if (from > to)
+            if (start > 0)
             {
                 {
                     elapsedTimeCounter -= (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -51,6 +65,10 @@ namespace FlowerCollector1
             }
         }
 
+        /// <summary>
+        /// Draw the timer
+        /// </summary>
+        /// <param name="spriteBatch">sprite batch</param>
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.DrawString(spriteFont, elapsedTime, position, Color.White);

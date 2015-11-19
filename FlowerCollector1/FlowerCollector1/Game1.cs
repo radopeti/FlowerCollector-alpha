@@ -100,9 +100,14 @@ namespace FlowerCollector1
 
                 case GameState.Play:
                     //board
-                    if (gameBoard.HideLandMines(gameTime)) 
+                    if (gameBoard.HideLandMines(gameTime))
                     {
                         gameBoard.Update(gameTime, mouse, keyboard);
+                        if (gameBoard.LifeBarCount == 0) 
+                        {
+                            gameBoard = new Board(Content, new Vector2(0,0));
+                            ChangeGameState(GameState.Menu);
+                        }
                     }
                 break;
 
