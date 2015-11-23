@@ -127,6 +127,14 @@ namespace FlowerCollector1
             {
                 get { return lifeBar.Count; }
             }
+            
+            /// <summary>
+            /// Return the number of flowers on the board
+            /// </summary>
+            public int FlowerCount 
+            {
+                get { return flowers.Count; }
+            }
 
         #endregion
 

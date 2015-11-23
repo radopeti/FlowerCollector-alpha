@@ -12,6 +12,8 @@ namespace FlowerCollector1
     {
         Menu,
         Play,
+        Win,
+        Loose,
         Quit
     }
 }

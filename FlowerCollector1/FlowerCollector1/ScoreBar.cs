@@ -33,11 +33,10 @@ namespace FlowerCollector1
             /// </summary>
             /// <param name="contentManager">content manager</param>
             /// <param name="position">position of the score bar</param>
-            public ScoreBar(ContentManager contentManager, Vector2 position) 
+            public ScoreBar(ContentManager contentManager, Vector2 position)
             {
                 spriteFont = contentManager.Load<SpriteFont>("scoreFont");
                 this.position = position;
-                this.score = 0;
                 this.message = "Score: ";
             }
 
