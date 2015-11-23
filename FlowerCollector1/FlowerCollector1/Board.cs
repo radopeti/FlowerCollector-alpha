@@ -67,7 +67,9 @@ namespace FlowerCollector1
                 Timer countdownTimer;
             //Lifebar
                 LifeBar lifeBar;
-            
+            //Scorebar
+                ScoreBar scoreBar;        
+
         #endregion
 
         #region Constructor
@@ -109,6 +111,9 @@ namespace FlowerCollector1
 
                 //add lifebar
                 lifeBar = new LifeBar(contentManager, new Vector2(400, 200));
+
+                //add scorebar
+                scoreBar = new ScoreBar(contentManager, new Vector2(400, 300));
             }
 
         #endregion
@@ -204,13 +209,14 @@ namespace FlowerCollector1
                     }
                 }
 
-                //check for collision between collector and flowers
+                //check for collision between collector and flowers, play sound and add score
                 foreach (Flower flower in flowers)
                 {
                     if (flower.DrawRectangle.Intersects(collector.DrawRectangle))
                     {
                         flower.Active = false;
                         soundBank.PlayCue("success");
+                        scoreBar.Score += 10;
                     }
                 }
 
@@ -274,6 +280,9 @@ namespace FlowerCollector1
 
                 //draw lifebar
                 lifeBar.Draw(spriteBatch);
+
+                //draw scorebar
+                scoreBar.Draw(spriteBatch);
             }
 
             /// <summary>
